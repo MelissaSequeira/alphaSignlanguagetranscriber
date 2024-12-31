@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gesture Recognition</title>
+    <style>
+        body {
+            background-color:rgb(70, 40, 129);
+            font-family: Arial, sans-serif;
+        }
+        #camera {
+            height:500px
+            width: 80%;
+            margin: 0 auto;
+            display: block;
+            border: 5px solid #ccc;
+        }
+        #buttons {
+            
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color:rgb(175, 0, 114);
+            color:black;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #text_area {
+            background-color:rgb(211, 159, 4);
+            color:black;
+            width: 80%;
+            height: 50px;
+            font-size: 20px;
+            margin: 10px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Gesture Recognition</h1>
+    <img id="camera" src="{{ url_for('video_feed') }}" alt="Camera Feed">
+    
+    <div id="buttons">
+        <button onclick="startRecognition()">Start Recognition</button>
+        <button onclick="playAudio()">Play Audio</button>
+        <button onclick="clearText()">Clear</button>
+    </div>
+
+    <input id="text_area" type="text" readonly>
+
+    <script>
+        let text_area = document.getElementById('text_area');
+
+        // Start recognition (send request to server to recognize gesture)
+        function startRecognition() {
+            fetch('/recognize', { method: 'POST', body: new URLSearchParams('action=recognize') })
+                .then(response => response.text())
+                .then(data => {
+                    text_area.value += data === 'space' ? ' ' : data;
+                });
+        }
+
+        // Play audio for the recognized text
+        function playAudio() {
+            fetch('/play_audio', {
+                method: 'POST',
+                body: new URLSearchParams({ text: text_area.value })
+            });
+        }
+
+        // Clear the last character in the text area
+        function clearText() {
+            text_area.value = text_area.value.slice(0, -1);
+        }
+    </script>
+</body>
+</html> 
