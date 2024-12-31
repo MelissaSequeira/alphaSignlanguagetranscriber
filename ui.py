@@ -10,8 +10,8 @@ from PIL import ImageTk, Image
 # Initialize OpenCV and HandDetector
 cap = cv2.VideoCapture(0)
 detector = HandDetector(maxHands=1)
-classifier = Classifier(r"C:\Users\Melissa\AppData\Local\Programs\Python\Python311\Sign_language to voice\keras_model.h5",
-                        r"C:\Users\Melissa\AppData\Local\Programs\Python\Python311\Sign_language to voice\labels.txt")
+classifier = Classifier(r"keras_model.h5",
+                        r"labels.txt")
 offset = 20
 imgSize = 300
 counter = 0
